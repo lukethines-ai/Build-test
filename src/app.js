@@ -5,9 +5,17 @@ const products = [
   { id: 'laptop', brand: 'A LITTLE LIFT', name: 'The Laptop & Mixer Riser', category: 'Stands', finish: 'Oak concept · 45 × 30 cm surface', detail: 'Lift your laptop or compact mixer and reclaim the space below.', price: 99, kind: 'riser', badge: '' },
   { id: 'keys', brand: 'YOUR OWN LITTLE STUDIO', name: 'The Keyboard Corner Stand', category: 'Stands', finish: 'Oak concept · 110 × 40 cm footprint', detail: 'A keyboard surface with an upper tier for a small sequencer.', price: 249, kind: 'keyboard', badge: 'MAKE THE MOST OF YOUR CORNER' },
   { id: 'console', brand: 'MUSIC MEETS EVERYDAY LIVING', name: 'The Session Storage Console', category: 'Cabinetry', finish: 'Oak concept · 120 × 40 cm footprint', detail: 'Open gear shelves and closed storage for cables and accessories.', price: 499, kind: 'console', badge: '' },
+  { id: 'electric-guitar', brand: 'FIND YOUR EVERYDAY SOUND', name: 'Everyday Electric Guitar', category: 'Instruments', type: 'Guitars', finish: 'Sunburst concept · Six strings', detail: 'A familiar companion for riffs, songwriting and headphone practice with a compatible amp.', price: 349, kind: 'instrument-guitar', badge: 'PLAY A LITTLE EVERY DAY' },
+  { id: 'electric-bass', brand: 'MAKE ROOM FOR THE LOW END', name: 'Home Session Bass', category: 'Instruments', type: 'Bass', finish: 'Natural concept · Four strings', detail: 'Explore bass lines at home with a compatible amp or audio interface.', price: 379, kind: 'instrument-bass', badge: '' },
+  { id: 'digital-keys', brand: 'YOUR NEXT FIVE-MINUTE SESSION', name: 'Compact Home Keyboard', category: 'Instruments', type: 'Keyboards', finish: 'Compact concept · 61 keys', detail: 'A keyboard concept for everyday practice and songwriting in a shared room.', price: 299, kind: 'instrument-keys', badge: 'SMALL SPACE, BIG IDEAS' },
+  { id: 'midi', brand: 'TURN A LAPTOP INTO A MUSIC CORNER', name: 'Desktop MIDI Controller', category: 'Studio gear', type: 'MIDI controllers', finish: 'Desktop concept · 25 keys & pads', detail: 'Control software instruments on your computer. MIDI controllers need compatible software to make sound.', price: 119, kind: 'midi', badge: '' },
+  { id: 'sequencer', brand: 'SAVE THAT LITTLE IDEA', name: 'Pocket Pattern Sequencer', category: 'Studio gear', type: 'Sequencers', finish: 'Desktop concept · 16 steps', detail: 'Build patterns for compatible MIDI gear. Check connections and software compatibility before choosing.', price: 199, kind: 'sequencer', badge: 'A LITTLE TIME TO CREATE' },
+  { id: 'synth', brand: 'FOLLOW YOUR CURIOSITY', name: 'Small Space Synth', category: 'Instruments', type: 'Synths', finish: 'Compact concept · 25 keys', detail: 'A hands-on synth concept for sound exploration without a full studio footprint.', price: 449, kind: 'synth', badge: '' },
+  { id: 'mic', brand: 'CAPTURE MUSIC AT HOME', name: 'Home Recording Microphone', category: 'Studio gear', type: 'Microphones', finish: 'USB microphone concept · Desktop stand', detail: 'A simple recording concept for voice and acoustic instruments with a compatible computer.', price: 99, kind: 'microphone', badge: '' },
 ];
 const money = value => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
 let category = 'All';
+let productType = 'All';
 let bag = {};
 try { const saved = JSON.parse(localStorage.getItem('room-for-music-bag') || '{}'); for (const g of products) if (Number.isInteger(saved[g.id]) && saved[g.id] > 0) bag[g.id] = Math.min(saved[g.id], 99); } catch {}
 function productArt(g) {
@@ -16,6 +24,11 @@ function productArt(g) {
   const mixer = '<rect x="82" y="120" width="82" height="30" rx="3" fill="#495347"/>' + Array.from({length:6},(_,i)=>`<circle cx="${92+i*12}" cy="128" r="2" fill="#c7d7b3"/><path d="M${92+i*12} 134v11" stroke="#9aab8d"/>`).join('');
   const guitar = '<path d="M119 155c-23-16-37 8-24 27-32 25-13 57 15 57s45-30 20-56c12-20 4-39-11-28Z" fill="#b78050" stroke="#735035"/><circle cx="112" cy="187" r="12" fill="#4c3727"/><path d="M107 95h10v84h-10Z" fill="#75583b"/><path d="M104 76h16v25h-16Z" fill="#bb925c"/><path d="M112 83v137" stroke="#e6d5ae"/><path d="M100 215h24" stroke="#473728" stroke-width="5"/>';
   let art;
+  if (g.kind.startsWith('instrument-') && !g.kind.endsWith('keys')) art = guitar.replace('#b78050', g.kind.endsWith('bass') ? '#d0b68a' : '#bc7141');
+  else if (['instrument-keys', 'midi', 'synth'].includes(g.kind)) art = `<g transform="translate(0 25)">${keys}</g><rect x="35" y="153" width="178" height="32" rx="3" fill="#495347"/>` + Array.from({length:8}, (_,i) => `<circle cx="${48+i*21}" cy="165" r="3" fill="#bac8a6"/>`).join('');
+  else if (g.kind === 'sequencer') art = '<rect x="39" y="128" width="174" height="85" rx="7" fill="#475441"/><rect x="55" y="143" width="48" height="18" rx="2" fill="#a2b886"/>' + Array.from({length:16}, (_,i) => `<rect x="${55+(i%8)*18}" y="${178+Math.floor(i/8)*17}" width="12" height="10" rx="2" fill="${i%3===0?'#cfac76':'#b6c2a5'}"/>`).join('');
+  else if (g.kind === 'microphone') art = '<ellipse cx="125" cy="248" rx="43" ry="10" fill="#495347"/><path d="M125 181v63" stroke="#65705d" stroke-width="9"/><path d="M99 152v25q26 34 52 0v-25" fill="none" stroke="#67745c" stroke-width="5"/><rect x="106" y="91" width="38" height="88" rx="18" fill="#485444"/>' + Array.from({length:10}, (_,i)=>`<path d="M112 ${103+i*6}h26" stroke="#92a184" stroke-width="2"/>`).join('');
+  else
   if(g.kind==='cabinet') art='<rect x="30" y="147" width="190" height="12" fill="#c7a679"/><path d="M38 159v99h12v-99m152 0v99h12v-99" fill="#a8855c"/><rect x="51" y="193" width="150" height="42" fill="#c3a078"/><path d="M125 195v39" stroke="#99774e"/><circle cx="114" cy="213" r="2" fill="#5e604e"/><circle cx="138" cy="213" r="2" fill="#5e604e"/>'+laptop+keys;
   else if(g.kind==='shelf') art='<path d="M29 153h192v12H29Z" fill="#c4a175"/><path d="M54 165v35l27-35m114 0v35l-27-35" fill="none" stroke="#64705d" stroke-width="5"/>'+mixer+'<rect x="177" y="126" width="29" height="25" fill="#b9c1ac"/>';
   else if(g.kind==='guitar') art='<path d="M91 233l-23 27m57-27l29 27M108 166v78" stroke="#644c35" stroke-width="8" fill="none"/><ellipse cx="112" cy="262" rx="48" ry="8" fill="#bd996f"/>'+guitar;
@@ -25,7 +38,7 @@ function productArt(g) {
   return `<svg viewBox="0 0 250 310" role="img" aria-label="${g.name} concept illustration"><ellipse cx="125" cy="268" rx="92" ry="9" fill="#deded2"/><g stroke-linejoin="round">${art}</g></svg>`;
 }
 function renderProducts() {
-  let items = products.filter(g => category === 'All' || g.category === category);
+  let items = products.filter(g => (category === 'All' || g.category === category) && (productType === 'All' || (g.type || g.category) === productType));
   const order = document.querySelector('#sort').value;
   if (order !== 'featured') items.sort((a,b) => order === 'low' ? a.price-b.price : b.price-a.price);
   document.querySelector('#products').innerHTML = items.map(g => `<article class="product"><div class="product-image">${g.badge ? `<span class="badge">${g.badge}</span>` : ''}${productArt(g)}<button class="add-button" data-add="${g.id}" aria-label="Add ${g.name} to bag">+</button></div><p class="brand">${g.brand} / ${g.category.toUpperCase()}</p><h3>${g.name}</h3><p class="finish">${g.finish}</p><p class="product-detail">${g.detail}</p><p class="price">${money(g.price)}</p></article>`).join('');
@@ -43,9 +56,12 @@ function renderCart() {
 document.querySelector('.tabs').addEventListener('click', e => {
   const button = e.target.closest('[data-category]'); if (!button) return;
   category = button.dataset.category;
+  productType = 'All';
+  document.querySelector('#product-type').value = 'All';
   document.querySelectorAll('[data-category]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});
   renderProducts();
 });
+document.querySelector('#product-type').addEventListener('change', e => { productType = e.target.value; category = 'All'; document.querySelectorAll('[data-category]').forEach(b => { const active = b.dataset.category === 'All'; b.classList.toggle('active', active); b.setAttribute('aria-pressed', String(active)); }); renderProducts(); });
 document.querySelector('#sort').addEventListener('change',renderProducts);
 document.querySelector('#products').addEventListener('click',e=>{
   const button = e.target.closest('[data-add]'); if (!button) return;

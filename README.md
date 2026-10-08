@@ -1,6 +1,6 @@
 # Room for Music
 
-A responsive concept storefront for home hobbyist musicians: cabinetry, shelving and stands that keep guitars, keyboards, laptops, mixers and sequencers ready to use in small spaces. Includes category filters, price sorting and a persistent shopping bag.
+A responsive concept storefront for home hobbyist musicians: cabinetry, shelving and stands that keep guitars, keyboards, laptops, mixers and sequencers ready to use in small spaces. Also includes guitars, bass, keyboards, MIDI controllers, sequencers, synths and microphones. Includes category and product-type filters, price sorting and a persistent shopping bag.
 
 Products, prices and dimensions are illustrative concepts. Checkout is a demo; payment processing and order fulfilment are not connected. The contact address is a placeholder. All illustrations are local SVGs.
 
@@ -11,3 +11,7 @@ npm run dev
 ```
 
 Default port: 3000. Override with PORT. Run `npm run check` for syntax validation. Fonts use Google Fonts with system fallbacks.
+
+## Wix hosting
+
+Run `npm run build:wix` to generate a self-contained HTML embed at `wix/room-for-music.html`. See [WIX_SETUP.md](WIX_SETUP.md) for publishing steps and Wix Stores requirements for real sales.
